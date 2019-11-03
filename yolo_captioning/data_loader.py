@@ -20,7 +20,7 @@ class DataLoader(data.Dataset):
     def __getitem__(self, index):
         coco = self.coco
         vocab = self.vocab
-	    #获取图片路径和对应的caption
+        #获取图片路径和对应的caption
         ann_id = self.ids[index]
         caption = coco.anns[ann_id]['caption']
         img_id = coco.anns[ann_id]['image_id']
