@@ -1,3 +1,4 @@
+#coding=utf-8
 from __future__ import division
 
 import torch 
@@ -18,6 +19,7 @@ class test_net(nn.Module):
         self.linear_1 = nn.Linear(input_size, 5)
         self.middle = nn.ModuleList([nn.Linear(5,5) for x in range(num_layers)])
         self.output = nn.Linear(5,2)
+
     
     def forward(self, x):
         x = x.view(-1)
