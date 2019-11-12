@@ -12,6 +12,7 @@ import torch.nn as nn
 import torchvision.models as models
 from torch.autograd import Variable
 from darknet import Darknet
+import numpy as np
 
 MAX_LENGTH = 10
 
@@ -82,6 +83,9 @@ class AttnDecoderRNN(nn.Module):
         self.attention = Attention(encoder_dim, decoder_dim, attention_dim)
 
         self.embedding = nn.Embedding(vocab_size, embed_dim)
+        pretrained_weight = np.array(pretrained_weight)
+        self.embedding.weight.data.copy_(torch.from_numpy(pretrained_weight))
+
         self.dropout = nn.Dropout(p=self.dropout)
         self.decode_step = nn.LSTMCell(embed_dim + encoder_dim, decoder_dim, bias=True)
         self.init_h = nn.Linear(encoder_dim, decoder_dim)
