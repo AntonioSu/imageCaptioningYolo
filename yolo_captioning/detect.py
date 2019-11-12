@@ -22,7 +22,7 @@ def arg_parse():
     Parse arguements to the detect module
     
     """
-    
+    base_path=r'/data/antonio/images_data/'
     parser = argparse.ArgumentParser(description='YOLO v3 Detection Module')
    
     parser.add_argument("--images", dest = 'images',default = "imgs", help ="Image / Directory containing images to perform detection upon", type = str)
@@ -44,11 +44,11 @@ def arg_parse():
 
     parser.add_argument('--model_path', type=str, default='models/', help='path for saving trained models')
     parser.add_argument('--crop_size', type=int, default=224, help='size for randomly cropping images')
-    parser.add_argument('--vocab_path', type=str, default='/home/antonio/image_caption/data/vocab.pkl', help='path for vocabulary wrapper')
-    parser.add_argument('--image_dir', type=str, default='/home/antonio/image_caption/data/resized2014', help='directory for resized images')
-    parser.add_argument('--image_dir_val', type=str, default='/home/antonio/image_caption/data/val2014_resized', help='directory for resized images')
-    parser.add_argument('--caption_path', type=str,default='/home/antonio/image_caption/data/annotations/captions_train2014.json',help='path for train annotation json file')
-    parser.add_argument('--caption_path_val', type=str,default='/home/antonio/image_caption/data/annotations/captions_val2014.json',help='path for val annotation json file')
+    parser.add_argument('--vocab_path', type=str, default=base_path+'vocab.pkl', help='path for vocabulary wrapper')
+    parser.add_argument('--image_dir', type=str, default=base_path+'esized2014', help='directory for resized images')
+    parser.add_argument('--image_dir_val', type=str, default=base_path+'val2014_resized', help='directory for resized images')
+    parser.add_argument('--caption_path', type=str,default=base_path+'annotations/captions_train2014.json',help='path for train annotation json file')
+    parser.add_argument('--caption_path_val', type=str,default=base_path+'annotations/captions_val2014.json',help='path for val annotation json file')
 
     parser.add_argument('--encoder_lr', type=float, default=1e-4)
     parser.add_argument('--decoder_lr', type=float, default=4e-4)
