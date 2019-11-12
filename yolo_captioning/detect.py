@@ -42,6 +42,8 @@ def arg_parse():
     parser.add_argument('--dropout', type=float, default=0.5)
     parser.add_argument('--fine_tune_encoder', type=bool, default='False', help='fine-tune encoder')
 
+
+    parser.add_argument('--vec_filename', type=str, default='word/doc_vecs.txt', help='path for saving trained models')
     parser.add_argument('--model_path', type=str, default='models/', help='path for saving trained models')
     parser.add_argument('--crop_size', type=int, default=224, help='size for randomly cropping images')
     parser.add_argument('--vocab_path', type=str, default=base_path+'vocab.pkl', help='path for vocabulary wrapper')
@@ -319,7 +321,8 @@ def main(args):
     decoder = AttnDecoderRNN(attention_dim=args.attention_dim,
                              embed_dim=args.embed_dim,
                              decoder_dim=args.decoder_dim,
-                             vocab_size=len(vocab),
+                             filename=args.vec_filename,
+                             vocab=vocab,
                              dropout=args.dropout)
     encoder.to(device)
     decoder.to(device)
