@@ -71,29 +71,39 @@ class Attention(nn.Module):
 
 class AttnDecoderRNN(nn.Module):
 
-    def __init__(self, attention_dim, embed_dim, decoder_dim, vocab_size, encoder_dim=255, dropout=0.5):
+    def __init__(self, attention_dim, embed_dim, decoder_dim, vocab,filename,encoder_dim=255, dropout=0.5):
         super(AttnDecoderRNN, self).__init__()
         self.encoder_dim = encoder_dim
         self.attention_dim = attention_dim
         self.embed_dim = embed_dim
         self.decoder_dim = decoder_dim
-        self.vocab_size = vocab_size
+        self.vocab_size = len(vocab)
         self.dropout = dropout
 
         self.attention = Attention(encoder_dim, decoder_dim, attention_dim)
 
-        self.embedding = nn.Embedding(vocab_size, embed_dim)
-        pretrained_weight = np.array(pretrained_weight)
-        self.embedding.weight.data.copy_(torch.from_numpy(pretrained_weight))
-
+        self.embedding = self.load_vec(vocab,embed_dim,filename)
         self.dropout = nn.Dropout(p=self.dropout)
         self.decode_step = nn.LSTMCell(embed_dim + encoder_dim, decoder_dim, bias=True)
         self.init_h = nn.Linear(encoder_dim, decoder_dim)
         self.init_c = nn.Linear(encoder_dim, decoder_dim)
         self.f_beta = nn.Linear(decoder_dim, encoder_dim)   # linear layer to create a sigmoid-activated gate
         self.sigmoid = nn.Sigmoid()
-        self.fc = nn.Linear(decoder_dim, vocab_size)
+        self.fc = nn.Linear(decoder_dim, self.vocab_size)
         self.init_weights()
+
+    def load_vec(self,vocab,embed_dim,filename):
+        embedding=nn.Embedding(len(vocab), embed_dim)
+        vec_dict = {}
+        with open(filename,'r') as f:
+            lines=f.readlines()
+            for line in lines:
+                line=line.split()
+                vec_dict[line[0]]=line[1:]
+        for key,value in vocab:
+            if key in vec_dict:
+                embedding.weight[value,:]=vec_dict[key]
+        return embedding
 
     def init_weights(self):
         self.embedding.weight.data.uniform_(-0.1, 0.1)
