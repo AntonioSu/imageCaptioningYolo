@@ -123,7 +123,7 @@ class AttnDecoderRNN(nn.Module):
         c = self.init_c(mean_encoder_out)
         return h, c
 
-    def forward(self, encoder_out, box_feature, encoded_captions, caption_lengths):
+    def forward(self, encoder_out, box_feature, encoded_captions, caption_lengths,detection_box):
         """
         :arg encoder_out:32*14*14*2048,encoded_captions:32*21,caption_length:list and the length is 32
         :return: scores for vocabulary, sorted encoded captions, decode lengths, weights
