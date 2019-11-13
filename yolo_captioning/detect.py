@@ -93,7 +93,7 @@ def train(train_loader, encoder, decoder, criterion, encoder_optimizer, decoder_
         box_feature=getresult(detection_box, feature13, feature26, feature52)
 
         # alphas=(32*23*196)
-        scores, caps_sorted, decode_lengths, alphas = decoder(feature13,box_feature, caps, caplens)
+        scores, caps_sorted, decode_lengths, alphas = decoder(feature13,box_feature, caps, caplens,detection_box)
         scores, _ = pack_padded_sequence(scores, decode_lengths, batch_first=True)
 
         targets = caps_sorted[:, 1:]
