@@ -30,7 +30,7 @@ class EncoderCNN(nn.Module):
 
 
         self.model = Darknet("cfg/yolov3.cfg")
-        self.model.load_weights("yolov3.weights")
+        self.model.load_weights("cfg/yolov3.weights")
         self.CUDA=cuda
         self.model.net_info["height"] = reso
     def forward(self, images):
@@ -82,7 +82,7 @@ class AttnDecoderRNN(nn.Module):
 
         self.attention = Attention(encoder_dim, decoder_dim, attention_dim)
 
-        self.embedding = self.load_vec(vocab,embed_dim,filename)
+        self.embedding = self.load_vec(vocab,embed_dim,filename)#nn.Embedding(len(vocab), embed_dim)#
         self.dropout = nn.Dropout(p=self.dropout)
         self.decode_step = nn.LSTMCell(embed_dim + encoder_dim, decoder_dim, bias=True)
         self.init_h = nn.Linear(encoder_dim, decoder_dim)
@@ -93,20 +93,24 @@ class AttnDecoderRNN(nn.Module):
         self.init_weights()
 
     def load_vec(self,vocab,embed_dim,filename):
-        embedding=nn.Embedding(len(vocab), embed_dim)
+        #embedding=nn.Embedding(len(vocab), embed_dim)
+        tensor=torch.FloatTensor(len(vocab), embed_dim)
+        embedding=torch.autograd.Variable(tensor)
         vec_dict = {}
         with open(filename,'r') as f:
             lines=f.readlines()
             for line in lines:
                 line=line.split()
-                vec_dict[line[0]]=line[1:]
-        for key,value in vocab:
+                temp=np.array(line[1:],dtype=float)
+                vec_dict[line[0]]=torch.from_numpy(temp)
+        for key,value in vocab.word2idx.items():
             if key in vec_dict:
-                embedding.weight[value,:]=vec_dict[key]
+                embedding[value,:]=vec_dict[key]
+        embedding=nn.Parameter(embedding)
         return embedding
 
     def init_weights(self):
-        self.embedding.weight.data.uniform_(-0.1, 0.1)
+        #self.embedding.uniform_(-0.1, 0.1)
         self.fc.bias.data.fill_(0)
         self.fc.weight.data.uniform_(-0.1, 0.1)
 
@@ -139,7 +143,7 @@ class AttnDecoderRNN(nn.Module):
         encoder_out=torch.cat((encoder_out,box_feature),dim=1)
         num_pixels = encoder_out.size(1)
         #embeddings=(32*21*512)
-        embeddings = self.embedding(encoded_captions)
+        embeddings = self.embedding[encoded_captions]
         #h=(32*512)
         h, c = self.init_hidden_state(encoder_out)
 

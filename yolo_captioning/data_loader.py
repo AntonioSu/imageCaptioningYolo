@@ -48,6 +48,10 @@ class DataLoader(data.Dataset):
         # 在main函数中得到单词和数值对应的vocab，通过如下语句将单词转化为数值
         for i in range(5):
             caption = []
+            #
+            # for key,value in vocab.word2idx.items():
+            #     temp=key
+            #     temp2=value
             caption.append(vocab('<start>'))
             caption.extend([vocab(token) for token in tokens[i]])
             caption.append(vocab('<end>'))

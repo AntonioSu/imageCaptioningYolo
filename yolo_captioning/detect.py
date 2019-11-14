@@ -36,7 +36,7 @@ def arg_parse():
 
     parser.add_argument("--scales", dest = "scales", help = "Scales to use for detection",default = "1,2,3", type = str)
 
-    parser.add_argument('--embed_dim', type=int, default=512, help='dimension of word embedding vectors')
+    parser.add_argument('--embed_dim', type=int, default=120, help='dimension of word embedding vectors')
     parser.add_argument('--attention_dim', type=int, default=512, help='dimension of attention linear layers')
     parser.add_argument('--decoder_dim', type=int, default=512, help='dimension of decoder rnn')
     parser.add_argument('--dropout', type=float, default=0.5)
@@ -47,7 +47,7 @@ def arg_parse():
     parser.add_argument('--model_path', type=str, default='models/', help='path for saving trained models')
     parser.add_argument('--crop_size', type=int, default=224, help='size for randomly cropping images')
     parser.add_argument('--vocab_path', type=str, default=base_path+'vocab.pkl', help='path for vocabulary wrapper')
-    parser.add_argument('--image_dir', type=str, default=base_path+'esized2014', help='directory for resized images')
+    parser.add_argument('--image_dir', type=str, default=base_path+'resized2014', help='directory for resized images')
     parser.add_argument('--image_dir_val', type=str, default=base_path+'val2014_resized', help='directory for resized images')
     parser.add_argument('--caption_path', type=str,default=base_path+'annotations/captions_train2014.json',help='path for train annotation json file')
     parser.add_argument('--caption_path_val', type=str,default=base_path+'annotations/captions_val2014.json',help='path for val annotation json file')
